@@ -42,7 +42,7 @@ EOF;
 
 		$this->assertRegExp('/^Oh thanks.\n\nHaving/', $fragments[0]->content);
 		$this->assertRegExp('/^-A/', $fragments[1]->content);
-		#$this->assertRegExp('/^On [^\:]+\:/', $fragments[2]->content);
+		$this->assertRegExp('/^\nOn [^\:]+\:/', $fragments[2]->content);
 		$this->assertRegExp('/^_/', $fragments[4]->content);
 	}
 
@@ -56,8 +56,8 @@ EOF;
 
 		$this->assertEquals('Hi,', $fragments[0]->content);
 		$this->assertRegExp('/^On [^\:]+\:/', $fragments[1]->content);
-		#$this->assertRegExp('/^You can list/', $fragments[2]->content);
-		#$this->assertRegExp('/^> /', $fragments[3]->content);
+		$this->assertRegExp('/^\nYou can list/', $fragments[2]->content);
+		$this->assertRegExp('/^\n>/', $fragments[3]->content);
 		$this->assertRegExp('/^_/', $fragments[5]->content);
 	}
 
@@ -66,7 +66,7 @@ EOF;
 		$this->assertEquals(2, count($fragments));
 
 		$this->assertRegExp('/^Awesome/', $fragments[0]->content);
-		#$this->assertRegExp('/^On/', $fragments[1]->content);
+		$this->assertRegExp('/^\nOn/', $fragments[1]->content);
 		$this->assertRegExp('/Loader/', $fragments[1]->content);
 	}
 
