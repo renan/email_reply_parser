@@ -89,14 +89,14 @@ class Email {
  * @param string $line A line of text from the email
  */
 	protected function _scanLine($line) {
-		$line = trim($line);
+		$line = ltrim($line);
 
 		// We're looking for leading `>`'s to see if this line is part of a quoted Fragment.
 		$isQuoted = !!preg_match('/(>+)$/', $line);
 
 		// Mark the current Fragment as a signature if the current line is empty
 		// and the Fragment starts with a common signature indicator.
-		if ($this->_fragment && empty($line) && preg_match('/[\-\_]$/', $this->_fragment->getLastLine())) {
+		if ($this->_fragment && $line === '' && preg_match('/[\-\_]$/', $this->_fragment->getLastLine())) {
 			$this->_fragment->signature = true;
 			$this->_finishFragment();
 			return;
@@ -107,7 +107,7 @@ class Email {
 		// it doesn't start with `>`.
 		if ($this->_fragment &&
 			($this->_fragment->quoted === $isQuoted ||
-			($this->_fragment->quoted && ($this->_isQuotedHeader($line) || empty($line))))) {
+			($this->_fragment->quoted && ($this->_isQuotedHeader($line) || $line === '')))) {
 			$this->_fragment->lines[] = $line;
 		} else {
 			// Otherwise, finish the fragment and start a new one.
@@ -157,7 +157,7 @@ class Email {
 
 		$this->_fragment->finish();
 		if (!$this->_foundVisible) {
-			if ($this->_fragment->quoted || $this->_fragment->signature || empty($this->_fragment->content)) {
+			if ($this->_fragment->quoted || $this->_fragment->signature || trim($this->_fragment->content) === '') {
 				$this->_fragment->hidden = true;
 			} else {
 				$this->_foundVisible = true;
