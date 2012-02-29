@@ -32,19 +32,19 @@ namespace EmailReplyParser;
 class Email {
 
 /**
- * List of Fragments this Email have.
- *
- * @param array
- */
-	protected $_fragments = array();
-
-/**
  * This determines if any 'visible' Fragment has been found.
  * Once any visible Fragment is found, stop looking for hidden ones.
  *
  * @param boolean
  */
-	protected $_foundVisible = false;
+	protected static $_foundVisible = false;
+
+/**
+ * List of Fragments this Email have.
+ *
+ * @param array
+ */
+	protected static $_fragments = array();
 
 /**
  * This instance variable points to the current Fragment. If the matched
@@ -53,7 +53,7 @@ class Email {
  *
  * @param Fragment
  */
-	protected $_fragment = null;
+	protected static $_fragment = null;
 
 /**
  * Splits the given text into a list of Fragments.  This is roughly done by
@@ -61,8 +61,14 @@ class Email {
  * can check for 'On <date>, <author> wrote:' lines above quoted blocks.
  *
  * @param string $text A email body.
+ * @return A list of parsed Fragments.
  */
-	public function read($text) {
+	public static function read($text) {
+		// Resets everything before starting
+		self::$_foundVisible = false;
+		self::$_fragments = array();
+		self::$_fragment = null;
+
 		// The text is reversed initially due to the way we check for hidden fragments.
 		$text = Fragment::reverse($text);
 
@@ -71,16 +77,16 @@ class Email {
 
 		// Scan each line of the email content.
 		foreach ($lines as $line) {
-			$this->_scanLine($line);
+			self::_scanLine($line);
 		}
 
 		// Finish up the final fragment. Finishing a fragment will detect any
 		// attributes (hidden, signature, reply), and join each line into a string.
-		$this->_finishFragment();
+		self::_finishFragment();
 
 		// Now that parsing is done, reverse the order.
-		$this->_fragments = array_reverse($this->_fragments);
-		return $this->_fragments;
+		self::$_fragments = array_reverse(self::$_fragments);
+		return self::$_fragments;
 	}
 
 /**
@@ -88,7 +94,7 @@ class Email {
  *
  * @param string $line A line of text from the email
  */
-	protected function _scanLine($line) {
+	protected static function _scanLine($line) {
 		$line = ltrim($line);
 
 		// We're looking for leading `>`'s to see if this line is part of a quoted Fragment.
@@ -96,23 +102,23 @@ class Email {
 
 		// Mark the current Fragment as a signature if the current line is empty
 		// and the Fragment starts with a common signature indicator.
-		if ($this->_fragment && $line === '' && preg_match('/[\-\_]$/', $this->_fragment->getLastLine())) {
-			$this->_fragment->signature = true;
-			$this->_finishFragment();
+		if (self::$_fragment && $line === '' && preg_match('/[\-\_]$/', self::$_fragment->getLastLine())) {
+			self::$_fragment->signature = true;
+			self::_finishFragment();
 			return;
 		}
 
 		// If the line matches the current fragment, add it. Note that a common
 		// reply header also counts as part of the quoted Fragment, even though
 		// it doesn't start with `>`.
-		if ($this->_fragment &&
-			($this->_fragment->quoted === $isQuoted ||
-			($this->_fragment->quoted && ($this->_isQuotedHeader($line) || $line === '')))) {
-			$this->_fragment->lines[] = $line;
+		if (self::$_fragment &&
+			(self::$_fragment->quoted === $isQuoted ||
+			(self::$_fragment->quoted && (self::_isQuotedHeader($line) || $line === '')))) {
+			self::$_fragment->lines[] = $line;
 		} else {
 			// Otherwise, finish the fragment and start a new one.
-			$this->_finishFragment();;
-			$this->_fragment = new Fragment($isQuoted, $line);
+			self::_finishFragment();;
+			self::$_fragment = new Fragment($isQuoted, $line);
 		}
 	}
 
@@ -122,7 +128,7 @@ class Email {
  * 
  * @param string $line A line of text from the email.
  */
-	protected function _isQuotedHeader($line) {
+	protected static function _isQuotedHeader($line) {
 		return !!preg_match('/^:etorw.*nO$/', $line);
 	}
 
@@ -150,21 +156,21 @@ class Email {
  *   -- 
  *   Player 2 (signature, hidden)
  */
-	protected function _finishFragment() {
-		if (!$this->_fragment) {
+	protected static function _finishFragment() {
+		if (!self::$_fragment) {
 			return;
 		}
 
-		$this->_fragment->finish();
-		if (!$this->_foundVisible) {
-			if ($this->_fragment->quoted || $this->_fragment->signature || trim($this->_fragment->content) === '') {
-				$this->_fragment->hidden = true;
+		self::$_fragment->finish();
+		if (!self::$_foundVisible) {
+			if (self::$_fragment->quoted || self::$_fragment->signature || trim(self::$_fragment->content) === '') {
+				self::$_fragment->hidden = true;
 			} else {
-				$this->_foundVisible = true;
+				self::$_foundVisible = true;
 			}
 		}
 
-		$this->_fragments[] = $this->_fragment;
-		$this->_fragment = null;
+		self::$_fragments[] = self::$_fragment;
+		self::$_fragment = null;
 	}
 }

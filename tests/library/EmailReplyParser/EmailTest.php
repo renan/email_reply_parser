@@ -72,8 +72,7 @@ EOF;
 
 	protected function _getEmailFragments($fixture) {
 		$text = file_get_contents($this->fixturesPath . 'email_' . $fixture . '.txt');
-		$Email = new Email();
-		return $Email->read($text);
+		return Email::read($text);
 	}
 
 	protected function _assertBooleans($fragments, $boolean, $sequence) {
