@@ -75,10 +75,17 @@ class Fragment {
 /**
  * Utility method to reverse a text string.
  *
+ * @todo Think of a better way to identify what is the encoding and how to reverse it.
  * @param string $text
  */
 	public static function reverse($text) {
 		preg_match_all('/./us', $text, $matches);
-		return join('', array_reverse($matches[0]));
+		$reversed = join('', array_reverse($matches[0]));
+		
+		if (empty($reversed)) {
+			$reversed = strrev($text);
+		}
+
+		return $reversed;
 	}
 }
