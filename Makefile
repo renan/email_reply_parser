@@ -2,4 +2,4 @@ default:
 	@echo "Email Reply Parser library"
 
 test:
-	@cd tests; phpunit .
+	@cd tests; phpunit --coverage-text .
