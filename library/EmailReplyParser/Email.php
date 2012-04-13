@@ -69,6 +69,12 @@ class Email {
 		self::$_fragments = array();
 		self::$_fragment = null;
 
+		// Check for multi-line reply headers. Some clients break up
+		// the "On DATE, NAME <EMAIL> wrote:" line into multiple lines.
+		$text = preg_replace_callback('/^(On.*wrote:)$/msU', function ($matches) {
+			return str_replace("\n", ' ', $matches[1]);
+		}, $text);
+
 		// The text is reversed initially due to the way we check for hidden fragments.
 		$text = Fragment::reverse($text);
 
@@ -102,7 +108,7 @@ class Email {
 
 		// Mark the current Fragment as a signature if the current line is empty
 		// and the Fragment starts with a common signature indicator.
-		if (self::$_fragment && $line === '' && preg_match('/[\-\_]$/', self::$_fragment->getLastLine())) {
+		if (self::$_fragment && $line === '' && preg_match('/(--|__|\w-$)/', self::$_fragment->getLastLine())) {
 			self::$_fragment->signature = true;
 			self::_finishFragment();
 			return;
@@ -117,7 +123,7 @@ class Email {
 			self::$_fragment->lines[] = $line;
 		} else {
 			// Otherwise, finish the fragment and start a new one.
-			self::_finishFragment();;
+			self::_finishFragment();
 			self::$_fragment = new Fragment($isQuoted, $line);
 		}
 	}
@@ -125,6 +131,8 @@ class Email {
 /**
  * Detects if a given line is a header above a quoted area.  It is only
  * checked for lines preceding quoted regions.
+ *
+ * Pretty much checks for "On DATE, NAME <EMAIL> wrote:"
  * 
  * @param string $line A line of text from the email.
  */

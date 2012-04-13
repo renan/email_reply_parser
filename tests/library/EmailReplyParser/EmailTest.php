@@ -70,6 +70,20 @@ EOF;
 		$this->assertRegExp('/Loader/', $fragments[1]->content);
 	}
 
+	public function testComplexBodyWithOnlyOneFragment() {
+		$fragments = $this->_getEmailFragments('1_5');
+		$this->assertEquals(1, count($fragments));
+	}
+
+	public function testDealsWithMultilineReplyHeaders() {
+		$fragments = $this->_getEmailFragments('1_6');
+		$this->assertEquals(2, count($fragments));
+
+		$this->assertRegExp('/^I get/', $fragments[0]->content);
+		$this->assertRegExp('/^\nOn/', $fragments[1]->content);
+		$this->assertRegExp('/Was this/', $fragments[1]->content);
+	}
+
 	protected function _getEmailFragments($fixture) {
 		$text = file_get_contents($this->fixturesPath . 'email_' . $fixture . '.txt');
 		return Email::read($text);
