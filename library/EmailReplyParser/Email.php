@@ -60,7 +60,7 @@ class Email {
  *
  * @param string
  */
-	protected static $_signatureRegex = '/(--|__|\w-$)/';
+	protected static $_signatureRegex = '/(--|__|\w-)$/';
 
 /**
  * Splits the given text into a list of Fragments.  This is roughly done by
