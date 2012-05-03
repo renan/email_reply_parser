@@ -56,6 +56,13 @@ class Email {
 	protected static $_fragment = null;
 
 /**
+ * Signature regex pattern.
+ *
+ * @param string
+ */
+	protected static $_signatureRegex = '/(--|__|\w-$)/';
+
+/**
  * Splits the given text into a list of Fragments.  This is roughly done by
  * reversing the text and parsing from the bottom to the top.  This way we
  * can check for 'On <date>, <author> wrote:' lines above quoted blocks.
@@ -77,6 +84,9 @@ class Email {
 
 		// The text is reversed initially due to the way we check for hidden fragments.
 		$text = Fragment::reverse($text);
+
+		// Strip any extra new lines or spaces from start.
+		$text = rtrim($text);
 
 		// Split into lines.
 		$lines = preg_split("/\n/", $text);
@@ -101,14 +111,14 @@ class Email {
  * @param string $line A line of text from the email
  */
 	protected static function _scanLine($line) {
-		$line = ltrim($line);
+		$line = ltrim($line, "/n");
 
 		// We're looking for leading `>`'s to see if this line is part of a quoted Fragment.
 		$isQuoted = !!preg_match('/(>+)$/', $line);
 
 		// Mark the current Fragment as a signature if the current line is empty
 		// and the Fragment starts with a common signature indicator.
-		if (self::$_fragment && $line === '' && preg_match('/(--|__|\w-$)/', self::$_fragment->getLastLine())) {
+		if (self::$_fragment && $line === '' && preg_match(self::$_signatureRegex, self::$_fragment->getLastLine())) {
 			self::$_fragment->signature = true;
 			self::_finishFragment();
 			return;

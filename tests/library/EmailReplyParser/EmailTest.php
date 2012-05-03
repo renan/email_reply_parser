@@ -19,7 +19,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase {
 		$expected = <<<EOF
 Hi folks
 
-What is the best way to clear a Riak bucket of all key, values after
+What is the best way to clear a Riak bucket of all key, values after 
 running a test?
 I am currently using the Java HTTP API.
 EOF;
@@ -82,6 +82,15 @@ EOF;
 		$this->assertRegExp('/^I get/', $fragments[0]->content);
 		$this->assertRegExp('/^\nOn/', $fragments[1]->content);
 		$this->assertRegExp('/Was this/', $fragments[1]->content);
+	}
+
+	public function testRecognizeOnlyOneSignature() {
+		$fragments = $this->_getEmailFragments('2_1');
+		$this->assertEquals(2, count($fragments));
+
+		$this->_assertBooleans($fragments, 'quoted', array(false, false));
+		$this->_assertBooleans($fragments, 'hidden', array(false, true));
+		$this->_assertBooleans($fragments, 'signature', array(false, true));
 	}
 
 	protected function _getEmailFragments($fixture) {

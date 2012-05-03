@@ -1,0 +1,21 @@
+
+-----BEGIN PGP SIGNED MESSAGE-----
+
+Hi folks
+
+I get proper rendering as well.
+
+Thank you!
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+
+iQEcBAEBAgAGBQJPlpnwAAoJEBAxpf04nFheJRgH/jt53ZLw/SjdtcNFfu0PMgcj
+/JZqlk2YRapov99TFI+72GrhzSKHMDTEMPKUJ6djNUuaqoxtA4PRDtZgIHiM0rEr
+tuQ6cr7Rxwf7CfivXMRrDDvse6CXbUeUB8BbiYj8zPhPs9zon/+EB3HWOnhiU16t
+rXQom3tP4YrqqFQpkggskx9VkZWE2ByBhoAwO/A0gjKNkFL8E/dn55z/IK5Y1G0k
+EziHfZlU1kOlAexZw5d2UYCb/7Is6yTEN0rc6x2cJQLGkLKQtjPWknUYFVtPIEap
++OLXENgTforT639jzjr/97bhsSBL4spnUQMwdMQ4sr9okQdYgsBviruC9UwMvAg=
+=cd+g
+-----END PGP SIGNATURE-----
