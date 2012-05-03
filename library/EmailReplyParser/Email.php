@@ -85,6 +85,9 @@ class Email {
 		// The text is reversed initially due to the way we check for hidden fragments.
 		$text = Fragment::reverse($text);
 
+		// Normalize line breaks.
+		$text = str_replace("\r\n", "\n", $text);
+
 		// Strip any extra new lines or spaces from start.
 		$text = rtrim($text);
 
