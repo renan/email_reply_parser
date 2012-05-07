@@ -114,7 +114,7 @@ class Email {
  * @param string $line A line of text from the email
  */
 	protected static function _scanLine($line) {
-		$line = ltrim($line, "/n");
+		$line = ltrim($line, "\n");
 
 		// We're looking for leading `>`'s to see if this line is part of a quoted Fragment.
 		$isQuoted = !!preg_match('/(>+)$/', $line);
