@@ -61,6 +61,7 @@ class Fragment {
 	public function finish() {
 		$this->content = implode("\n", $this->lines);
 		$this->content = Fragment::reverse($this->content);
+		unset($this->lines);
 	}
 
 /**
