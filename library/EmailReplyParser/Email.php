@@ -86,11 +86,11 @@ class Email {
 			return str_replace("\n", ' ', $matches[1]);
 		}, $text);
 
-		// The text is reversed initially due to the way we check for hidden fragments.
-		$text = Fragment::reverse($text);
-
 		// Normalize line breaks.
 		$text = str_replace("\r\n", "\n", $text);
+
+		// The text is reversed initially due to the way we check for hidden fragments.
+		$text = Fragment::reverse($text);
 
 		// Strip any extra new lines or spaces from start.
 		$text = rtrim($text);
