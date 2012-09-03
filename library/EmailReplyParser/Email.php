@@ -59,12 +59,12 @@ class Email {
  * Signature regex pattern.
  *
  * Matches:
- * 1. A whole line with only -- or __
+ * 1. A whole line with only -- or __, optionally followed by a space
  * 2. A single - followed by text
  *
  * @param string
  */
-	protected static $_signatureRegex = '/((^(-|_){2,}$)|(\w-$))/';
+	protected static $_signatureRegex = '/((^\s?(-|_){2,}$)|(\w-$))/';
 
 /**
  * Splits the given text into a list of Fragments.  This is roughly done by
