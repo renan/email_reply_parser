@@ -78,12 +78,12 @@ class Fragment {
  *
  * @param string $text
  */
-	public static function reverse($text) {
-		$position = mb_strlen($text);
-		$reversed = '';
-		while ($position-- > 0) {
-			$reversed .= mb_substr($text, $position, 1);
+	public static function reverse($text, $encoding = null) {
+		if (empty($encoding)) {
+			$encoding = mb_detect_encoding($text);
 		}
-		return $reversed;
+		$text = mb_convert_encoding($text, 'UTF-32BE', $encoding);
+		$text = mb_convert_encoding(strrev($text), $encoding, 'UTF-32LE');
+		return $text;
 	}
 }
