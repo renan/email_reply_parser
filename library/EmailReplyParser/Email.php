@@ -103,6 +103,9 @@ class Email {
 			self::_scanLine($line);
 		}
 
+		// Free variables
+		unset($text, $lines);
+
 		// Finish up the final fragment. Finishing a fragment will detect any
 		// attributes (hidden, signature, reply), and join each line into a string.
 		self::_finishFragment();

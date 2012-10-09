@@ -93,6 +93,17 @@ EOF;
 		$this->_assertBooleans($fragments, 'signature', array(false, true));
 	}
 
+	public function testParseBigReplies() {
+		$text = str_repeat(
+			'This is a very big reply (5 MB), each line containing 64 bytes.' . PHP_EOL,
+			(1024 / 64) * 1024 * 5
+		);
+		$fragments = Email::read($text);
+
+		$this->assertEquals(1, count($fragments));
+		$this->assertEquals($text, $fragments[0]->content);
+	}
+
 	protected function _getEmailFragments($fixture) {
 		$text = file_get_contents($this->fixturesPath . 'email_' . $fixture . '.txt');
 		return Email::read($text);
