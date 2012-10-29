@@ -104,6 +104,15 @@ EOF;
 		$this->assertEquals($text, $fragments[0]->content);
 	}
 
+	public function testParseSpecificEncoding() {
+		$text = file_get_contents($this->fixturesPath . 'fragment_iso8859.txt');
+		$fragments = Email::read($text, 'ISO-8859-1');
+
+		$this->assertEquals(1, count($fragments));
+		$this->assertEquals($fragments[0]->content, $text);
+		$this->assertEquals($fragments[0]->encoding, 'ISO-8859-1');
+	}
+
 	protected function _getEmailFragments($fixture) {
 		$text = file_get_contents($this->fixturesPath . 'email_' . $fixture . '.txt');
 		return Email::read($text);

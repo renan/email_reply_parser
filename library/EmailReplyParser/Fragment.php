@@ -37,6 +37,13 @@ class Fragment {
 	public $quoted = false;
 
 /**
+ * Determines the encoding to use when reversing this Fragment.
+ *
+ * @param string
+ */
+	public $encoding = null;
+
+/**
  * This is reserved for the joined String that is build when this Fragment is finished.
  *
  * @param string
@@ -46,27 +53,31 @@ class Fragment {
 /**
  * Store the first line and marks the Fragment as quoted, if it is.
  *
- * @param boolean $isQuoted Eitheir if the line if quoted or not.
+ * @param boolean $isQuoted Whether if the line if quoted or not.
  * @param string $firstLine A line of text from the email.
+ * @param string $encoding Optional encoding to use when reversing this Fragment.
  */
-	public function __construct($isQuoted, $firstLine) {
+	public function __construct($isQuoted, $firstLine, $encoding = null) {
 		$this->quoted = $isQuoted;
 		$this->lines[] = $firstLine;
+		$this->encoding = $encoding;
 	}
 
 /**
  * Builds the string content by joining the lines and reversing them.
  *
+ * @return void
  */
 	public function finish() {
 		$this->content = implode("\n", $this->lines);
-		$this->content = Fragment::reverse($this->content);
+		$this->content = self::reverse($this->content, $this->encoding);
 		unset($this->lines);
 	}
 
 /**
  * Get the last line of this Fragment.
  *
+ * @return string Last line of this Fragment.
  */
 	public function getLastLine() {
 		$count = count($this->lines);
@@ -76,7 +87,9 @@ class Fragment {
 /**
  * Utility method to reverse a text string.
  *
- * @param string $text
+ * @param string $text Text to be reversed.
+ * @param string $encoding Optional encoding to use when reversing the text.
+ * @return string Reversed text.
  */
 	public static function reverse($text, $encoding = null) {
 		if (empty($encoding)) {

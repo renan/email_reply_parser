@@ -56,6 +56,13 @@ class Email {
 	protected static $_fragment = null;
 
 /**
+ * This determines the encoding to be used when parsing the text.
+ *
+ * @param string
+ */
+	protected static $_encoding = null;
+
+/**
  * Signature regex pattern.
  *
  * Matches:
@@ -72,13 +79,15 @@ class Email {
  * can check for 'On <date>, <author> wrote:' lines above quoted blocks.
  *
  * @param string $text A email body.
- * @return A list of parsed Fragments.
+ * @param string $encoding Optional encoding to be used when parsing the text.
+ * @return array A list of parsed Fragments.
  */
-	public static function read($text) {
+	public static function read($text, $encoding = null) {
 		// Resets everything before starting
 		self::$_foundVisible = false;
 		self::$_fragments = array();
 		self::$_fragment = null;
+		self::$_encoding = $encoding;
 
 		// Check for multi-line reply headers. Some clients break up
 		// the "On DATE, NAME <EMAIL> wrote:" line into multiple lines.
@@ -90,7 +99,7 @@ class Email {
 		$text = str_replace("\r\n", "\n", $text);
 
 		// The text is reversed initially due to the way we check for hidden fragments.
-		$text = Fragment::reverse($text);
+		$text = Fragment::reverse($text, self::$_encoding);
 
 		// Strip any extra new lines or spaces from start.
 		$text = rtrim($text);
@@ -119,6 +128,7 @@ class Email {
  * Scans the given line of text and figures out which fragment it belongs to.
  *
  * @param string $line A line of text from the email
+ * @return void
  */
 	protected static function _scanLine($line) {
 		$line = ltrim($line, "\n");
@@ -144,7 +154,7 @@ class Email {
 		} else {
 			// Otherwise, finish the fragment and start a new one.
 			self::_finishFragment();
-			self::$_fragment = new Fragment($isQuoted, $line);
+			self::$_fragment = new Fragment($isQuoted, $line, self::$_encoding);
 		}
 	}
 
@@ -155,6 +165,7 @@ class Email {
  * Pretty much checks for "On DATE, NAME <EMAIL> wrote:"
  * 
  * @param string $line A line of text from the email.
+ * @return boolean Whether is a quoted header or not.
  */
 	protected static function _isQuotedHeader($line) {
 		return !!preg_match('/^:etorw.*nO$/', $line);
@@ -183,6 +194,8 @@ class Email {
  *
  *   -- 
  *   Player 2 (signature, hidden)
+ *
+ * @return void
  */
 	protected static function _finishFragment() {
 		if (!self::$_fragment) {
