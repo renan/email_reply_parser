@@ -1,5 +1,5 @@
 <phpunit backupGlobals="false"
-         backupStaticAttributes="false" 
+         backupStaticAttributes="false"
          bootstrap="bootstrap.php"
          cacheTokens="true"
          colors="true"

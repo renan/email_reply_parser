@@ -10,18 +10,18 @@ set_include_path('../library' . PATH_SEPARATOR . get_include_path());
  * PHP software.
  */
 spl_autoload_register(
-	function($className) {
-		$fileParts = explode('\\', ltrim($className, '\\'));
+    function($className) {
+        $fileParts = explode('\\', ltrim($className, '\\'));
 
-		if (strpos(end($fileParts), '_') !== false) {
-			array_splice($fileParts, -1, 1, explode('_', current($fileParts)));
-		}
+        if (strpos(end($fileParts), '_') !== false) {
+            array_splice($fileParts, -1, 1, explode('_', current($fileParts)));
+        }
 
-		$file = implode(DIRECTORY_SEPARATOR, $fileParts) . '.php';
-		foreach (explode(PATH_SEPARATOR, get_include_path()) as $path) {
-			if (file_exists($path = $path . DIRECTORY_SEPARATOR . $file)) {
-				return require $path;
-			}
-		}
-	}
+        $file = implode(DIRECTORY_SEPARATOR, $fileParts) . '.php';
+        foreach (explode(PATH_SEPARATOR, get_include_path()) as $path) {
+            if (file_exists($path = $path . DIRECTORY_SEPARATOR . $file)) {
+                return require $path;
+            }
+        }
+    }
 );
