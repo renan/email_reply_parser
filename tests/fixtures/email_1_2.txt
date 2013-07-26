@@ -34,7 +34,8 @@ Bucket. There is, however, an open ticket for the feature. To delete all
 the keys in a bucket, you’ll need to delete them all individually."
 
 > 
-> -Abhishek Kona
+> -- 
+> Abhishek Kona
 > 
 > 
 > _______________________________________________

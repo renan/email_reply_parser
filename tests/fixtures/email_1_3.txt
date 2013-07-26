@@ -2,7 +2,8 @@ Oh thanks.
 
 Having the function would be great.
 
--Abhishek Kona
+-- 
+Abhishek Kona
 
 On 01/03/11 7:07 PM, Russell Brown wrote:
 > Hi,
@@ -39,7 +40,8 @@ On 01/03/11 7:07 PM, Russell Brown wrote:
 > Bucket. There is, however, an open ticket for the feature. To delete all
 > the keys in a bucket, you’ll need to delete them all individually."
 >
->> -Abhishek Kona
+>> -- 
+>> Abhishek Kona
 >>
 >>
 >> _______________________________________________

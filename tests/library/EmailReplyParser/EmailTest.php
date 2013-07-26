@@ -10,60 +10,35 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->fixturesPath = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
     }
 
-    public function testReadSimpleBody()
-    {
-        $fragments = $this->_getEmailFragments('1_1');
-        $this->assertEquals(3, count($fragments));
-
-        $this->_assertBooleans($fragments, 'quoted', array(false, false, false));
-        $this->_assertBooleans($fragments, 'hidden', array(false, true, true));
-        $this->_assertBooleans($fragments, 'signature', array(false, true, true));
-
-        $expected = <<<EOF
-Hi folks
-
-What is the best way to clear a Riak bucket of all key, values after 
-running a test?
-I am currently using the Java HTTP API.
-EOF;
-        $this->assertEquals($expected, $fragments[0]->content);
-
-        $expected = <<<EOF
--Abhishek Kona
-
-EOF;
-        $this->assertEquals($expected, $fragments[1]->content);
-    }
-
     public function testReadTopPost()
     {
         $fragments = $this->_getEmailFragments('1_3');
-        $this->assertEquals(5, count($fragments));
+        $this->assertEquals(4, count($fragments));
 
-        $this->_assertBooleans($fragments, 'quoted', array(false, false, true, false, false));
-        $this->_assertBooleans($fragments, 'hidden', array(false, true, true, true, true));
-        $this->_assertBooleans($fragments, 'signature', array(false, true, false, false, true));
+        $this->_assertBooleans($fragments, 'quoted', array(false, false, true, false));
+        $this->_assertBooleans($fragments, 'hidden', array(false, false, false, false));
+        $this->_assertBooleans($fragments, 'signature', array(false, true, false, false));
 
         $this->assertRegExp('/^Oh thanks.\n\nHaving/', $fragments[0]->content);
-        $this->assertRegExp('/^-A/', $fragments[1]->content);
+        $this->assertRegExp('/^--\s\nA/', $fragments[1]->content);
         $this->assertRegExp('/^\nOn [^\:]+\:/', $fragments[2]->content);
-        $this->assertRegExp('/^_/', $fragments[4]->content);
+        $this->assertRegExp('/^\n+_+\nriak-users/', $fragments[3]->content);
     }
 
     public function testReadBottomPost()
     {
         $fragments = $this->_getEmailFragments('1_2');
-        $this->assertEquals(6, count($fragments));
+        $this->assertEquals(5, count($fragments));
 
-        $this->_assertBooleans($fragments, 'quoted', array(false, true, false, true, false, false));
-        $this->_assertBooleans($fragments, 'hidden', array(false, false, false, true, true, true));
-        $this->_assertBooleans($fragments, 'signature', array(false, false, false, false, false, true));
+        $this->_assertBooleans($fragments, 'quoted', array(false, true, false, true, false));
+        $this->_assertBooleans($fragments, 'hidden', array(false, false, false, false, false));
+        $this->_assertBooleans($fragments, 'signature', array(false, false, false, false, false));
 
         $this->assertEquals('Hi,', $fragments[0]->content);
         $this->assertRegExp('/^On [^\:]+\:/', $fragments[1]->content);
         $this->assertRegExp('/^\nYou can list/', $fragments[2]->content);
         $this->assertRegExp('/^\n>/', $fragments[3]->content);
-        $this->assertRegExp('/^_/', $fragments[5]->content);
+        $this->assertRegExp('/^\n+_+\nriak-users/', $fragments[4]->content);
     }
 
     public function testRecognizesDateStringAboveQuote()

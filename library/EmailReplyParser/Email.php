@@ -20,7 +20,7 @@ namespace EmailReplyParser;
  *
  *     this is some text
  *
- *     --
+ *     -- 
  *     Bob
  *     http://homepage.com/~bob
  *
@@ -65,13 +65,13 @@ class Email
 /**
  * Signature regex pattern.
  *
- * Matches:
- * 1. A whole line with only -- or __, optionally followed by a space
- * 2. A single - followed by text
+ * Matches a single line consisting of exactly two hyphens, followed by a space,
+ * followed by the end of line
  *
+ * @see http://en.wikipedia.org/wiki/Signature_block
  * @param string
  */
-    protected static $_signatureRegex = '/((^\s?(-|_){2,}$)|(\w-$))/';
+    protected static $_signatureRegex = '/^\s\-\-$/';
 
 /**
  * Splits the given text into a list of Fragments.  This is roughly done by
