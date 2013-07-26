@@ -1,6 +1,6 @@
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="bootstrap.php"
+         bootstrap="tests/bootstrap.php"
          cacheTokens="true"
          colors="true"
          convertErrorsToExceptions="true"
@@ -10,9 +10,4 @@
          stopOnFailure="false"
          syntaxCheck="false"
          verbose="false">
-    <filter>
-        <whitelist>
-            <directory>../library/</directory>
-        </whitelist>
-    </filter>
 </phpunit>

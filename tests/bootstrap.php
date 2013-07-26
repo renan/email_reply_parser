@@ -3,7 +3,7 @@
  * Uses UTC as timezone and sets the correct include path.
  */
 date_default_timezone_set('UTC');
-set_include_path('../library' . PATH_SEPARATOR . get_include_path());
+set_include_path(dirname(__DIR__) . '/library' . PATH_SEPARATOR . get_include_path());
 
 /**
  * Autoloader that implements the PSR-0 spec for interoperability between
