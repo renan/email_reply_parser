@@ -2,8 +2,8 @@
 	"name": "renansaddam/email_reply_parser",
 	"type": "library",
 	"description": "Small library to parse plain text email content and identify fragments of quoted texts, signature or original body content.",
-	"version": "1.0.1",
-	"time": "2012-10-29",
+	"version": "1.1.0",
+	"time": "2013-07-26",
 	"keywords": ["email", "parse", "signature", "quote"],
 	"homepage": "http://github.com/renansaddam/email_reply_parser",
 	"license": "MIT",
@@ -24,7 +24,7 @@
 	},
 	"extra": {
 		"branch-alias": {
-			"dev-master": "1.0.x-dev"
+			"dev-master": "1.1.x-dev"
 		}
 	}
 }
