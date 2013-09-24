@@ -4,4 +4,12 @@ php:
  - 5.3
  - 5.4
 
-script: phpunit --coverage-text .
+before_script:
+ - composer require --dev satooshi/php-coveralls:dev-master
+
+script:
+ - mkdir -p build/logs
+ - phpunit --coverage-clover build/logs/clover.xml .
+
+after_script:
+ - php vendor/bin/coveralls
