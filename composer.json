@@ -17,6 +17,10 @@
 		"php": ">=5.3",
 		"ext-mbstring": "*"
 	},
+	"require-dev": {
+		"phpunit/phpunit": "3.7.*",
+		"satooshi/php-coveralls": "dev-master"
+	},
 	"autoload": {
 		"psr-0": {
 			"EmailReplyParser": "library/"

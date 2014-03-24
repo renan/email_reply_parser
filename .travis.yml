@@ -5,11 +5,12 @@ php:
  - 5.4
 
 before_script:
- - composer require --dev satooshi/php-coveralls:dev-master
+  - composer self-update
+  - composer install
 
 script:
- - mkdir -p build/logs
- - phpunit --coverage-clover build/logs/clover.xml .
+  - mkdir -p build/logs
+  - ./vendor/bin/phpunit -c phpunit.dist.xml
 
 after_script:
- - php vendor/bin/coveralls
+  - ./vendor/bin/coveralls
